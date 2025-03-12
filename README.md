@@ -1,309 +1,140 @@
-# Healthcare-Data-Analysis
+
+# Advanced SQL Analysis on Healthcare Dataset
 
 
----
 
-**Project Overview**
+### **Overview**
+Healthcare data plays a crucial role in understanding patient demographics, medical conditions, hospital operations, and financial costs associated with treatment. This dataset includes patient records such as age, gender, medical conditions, admission details, hospital names, doctor assignments, insurance providers, billing amounts, and test results. 
 
-**Project Title:** Healthcare Data Analysis  
-**Database:** healthcare_dataset.csv  
+By analyzing this dataset, we aim to uncover trends in patient admissions, hospital billing, medical conditions, and insurance provider expenses. The insights gained can help improve hospital resource management, financial planning, and patient care strategies.
 
-This project demonstrates SQL skills and techniques commonly used by data analysts to create, clean, explore, and analyze a healthcare dataset. It involves setting up a database, performing exploratory data analysis (EDA), and drawing insights from healthcare data.
-**Objectives**
+### **Methodology**
+To ensure a structured approach to analyzing the dataset, we followed these steps:
 
-1. **Set Up Healthcare Database:** Create and populate a healthcare database with the provided dataset.
-2. **Data Cleaning:** Identify and remove records with missing or null values using Excel.
-3. **Exploratory Data Analysis (EDA):** Perform basic EDA to understand the dataset’s structure and content.
-4. **Business Analysis:** Use SQL to answer specific healthcare-related questions and derive insights from the dataset.
+1. **Importing Data** – Loaded the dataset into SQL for analysis.
+2. **Data Cleaning** – Checked for inconsistencies, missing values, and potential errors in hospital names, patient details, and billing amounts.
+3. **Exploratory Data Analysis (EDA)** – Conducted an initial review of patient demographics, medical conditions, and billing distribution.
+4. **Analysis** – Performed SQL queries to extract valuable insights from the dataset.
 
-**Project Structure**
+### **Key Questions to Answer**
+The project focuses on answering the following key business questions:
 
-1. **Database Setup**
+- **Which hospitals generate the highest billing for emergency cases?**
+- **What are the most common medical conditions per age group, and what is the average billing for each group?**
+- **How frequently do patients get readmitted within three years, and how much do they cost?**
+- **Which insurance provider covers the highest billing per patient?**
+- **How many patients does each doctor handle, and what is their average billing amount?**
 
-   * **Database Creation:** Start by creating a database named healthcare_db.
-   * **Table Creation:** A table named healthanalysis is created to store healthcare data. The table includes the following columns:
-     * **Name:** Patient's name.
-     * **Age:** Patient's age at admission.
-     * **Gender:** Patient's gender (Male/Female).
-     * **Blood Type:** Patient’s blood type (e.g., A+, O-, etc.).
-     * **Medical Condition:** Primary diagnosis (e.g., Diabetes, Hypertension, Asthma).
-     * **Date of Admission:** Date of patient’s admission.
-     * **Doctor:** Name of the attending doctor.
-     * **Hospital:** Name of the healthcare facility.
-     * **Insurance Provider:** Insurance provider (e.g., Aetna, Blue Cross, Medicare).
-     * **Billing Amount:** Total billed amount for the patient's care.
-     * **Room Number:** Room where the patient stayed.
-     * **Admission Type:** Circumstances of the admission (Emergency, Elective, Urgent).
-     * **Discharge Date:** Date of patient’s discharge.
-     * **Medication:** Prescribed medication (e.g., Aspirin, Ibuprofen).
-     * **Test Results:** Results of any medical tests (Normal, Abnormal, Inconclusive).
-     
-  ```sql
+## Analyses and Insights
 
-          CREATE Database Healthcare_db;
-
-          CREATE TABLE healthanalysis 
-          (ID INT NOT NULL  AUTO_INCREMENT PRIMARY KEY,
-          first_name         VARCHAR(50),
-	      last_name          VARCHAR(50),
-		age                INT,
-		gender             VARCHAR (10),
-          blood_type         VARCHAR(10),
-          medical_condition  VARCHAR(50),
-          dateofadmission    DATE,
-          doctor             VARCHAR(50),
-          hospital           VARCHAR(50),
-          insurance_provider VARCHAR(50),
-          billing_amount     DECIMAL (10,2),
-          room_number        INT,
-          admission_type     VARCHAR(50),
-          discharge_date     DATE,
-          medication         VARCHAR(50),
-          test_result        VARCHAR(20);
-
-```
-    
-
-
-2. **Data Exploration & Cleaning**
-
-   * **Spell Checking:** Correct spelling errors in the dataset.
-   * **Removing Duplicate Rows:** Eliminate any duplicate entries.
-   * **Finding and Replacing Text:** Standardize text fields where necessary.
-   * **Removing Spaces and Non-printing Characters:** Clean up text data.
-   * **Fixing Numbers and Signs:** Ensure numerical values are formatted correctly.
-   * **Fixing Dates and Times:** Correct date and time formats.
-   * **Transforming and Rearranging Columns/Rows:** Organize data for easier analysis.
-   * **Key exploration steps:**
-     * **Record Count:** Total number of records.
-     * **Average Patient Age:** Calculate average age of patients.
-     * **Blood Type Distribution:** Explore different blood types.
-     * **Medical Condition Categories:** Analyze the most common conditions.
-     * **Insurance Provider Breakdown:** Distribution of insurance providers.
-     * **Admission Types:** Analyze admission types (Emergency, Elective, Urgent).
-     * **Medication Types:** Commonly prescribed medications.
-     * **Test Results:** Analyze test results (Normal, Abnormal, Inconclusive).
+### **1. Goal:**  
+**Identify the top 5 hospitals with the highest total billing amount for patients admitted due to emergency cases.**  
+*(This helps analyze which hospitals handle the most costly emergency cases, crucial for financial planning.)*
 
 ```sql
-
-        SELECT COUNT(*) FROM healthanalysis;
-
-        ROUND(AVG(age),2) FROM healthanalysis;
-   
-        SELECT DISTINCT blood_type FROM healthanalysis;
-
-        SELECT DISTINCT medical_condition FROM healthanalysis;
-
-        SELECT DISTINCT insurance_provider FROM healthanalysis;
-
-        SELECT DISTINCT admission_type FROM healthanalysis;
-
-        SELECT DISTINCT medication FROM healthanalysis;
-
-        SELECT DISTINCT test_result FROM healthanalysis;
-
+SELECT hospital, SUM(billing_amount) AS total_billing
+FROM healthcare_dataset
+WHERE admission_type = 'Emergency'
+GROUP BY hospital
+ORDER BY total_billing DESC
+LIMIT 5;
 
 ```
-    
 
-    
-       
+The results highlight hospitals that accumulate the highest billing for emergency patients. This can help healthcare administrators allocate resources effectively and identify trends in emergency admissions.
 
-3. **Data Analysis & Findings**
 
-   The following SQL queries were used to answer specific healthcare-related questions and provide valuable insights:
 
-   **1.** **Write a SQL query to get the first and last names of patients admitted on "2020-01-21".**
+### 2. Goal:  
+**Analyze the average billing amount and the most common medical condition per age group (grouped by decades).**  
+*(This provides insights into which medical conditions are most prevalent in each age bracket and their financial impact.)*
 
-   
+#### **SQL Query:**
 ```sql
-     SELECT 
-        first_name,
-        last_name,
-        dateofadmission
-     FROM healthanalysis
-     WHERE dateofadmission="2020-01-21";
+SELECT 
+    CASE 
+        WHEN age BETWEEN 0 AND 9 THEN '0-9'
+        WHEN age BETWEEN 10 AND 19 THEN '10-19'
+        WHEN age BETWEEN 20 AND 29 THEN '20-29'
+        WHEN age BETWEEN 30 AND 39 THEN '30-39'
+        WHEN age BETWEEN 40 AND 49 THEN '40-49'
+        WHEN age BETWEEN 50 AND 59 THEN '50-59'
+        WHEN age BETWEEN 60 AND 69 THEN '60-69'
+        WHEN age BETWEEN 70 AND 79 THEN '70-79'
+        ELSE '80+'
+    END AS age_group,
+    ROUND(AVG(billing_amount), 2) AS avg_billing,
+    (SELECT medical_condition 
+     FROM healthcare_dataset h2 
+     WHERE h2.age = h1.age
+     GROUP BY medical_condition
+     ORDER BY COUNT(*) DESC 
+     LIMIT 1) AS most_common_condition
+FROM healthcare_dataset h1
+GROUP BY age_group;
+
 ```
 
-   **2.** **Write a SQL query to get the billing amounts for patients with the insurance provider "Blue Cross" where the billing amount is greater 
-   than 10,000.00 in November 2020.**
+Different age groups exhibit distinct medical conditions, with some being more prevalent in certain age brackets. For example, younger age groups may have fewer chronic conditions, while older groups may show a higher incidence of diseases such as diabetes, hypertension, or obesity. Additionally, the average billing amount varies by age, reflecting differences in treatment complexity and hospitalization costs. These insights can help hospitals optimize resource allocation and tailor preventive care strategies.
 
-   
+
+
+
+
+### 3. Goal:  
+**Evaluate the readmission rate by identifying patients who were admitted multiple times within the past 3 years and calculating their total billing amount.**  
+*(This helps identify frequent patients and their financial burden on the healthcare system.)*
+
+#### **SQL Query:**
 ```sql
-     SELECT 
-          insurance_provider,
-          dateofadmission,
-          billing_amount 
-     FROM healthanalysis
-     WHERE insurance_provider="Blue cross"
-          AND 
-     MONTH(dateofadmission)=11
-          AND 
-     YEAR(dateofadmission)=2020
-          AND 
-     billing_amount>=10000.00;
+SELECT first_name, last_name, COUNT(*) AS admission_count, SUM(billing_amount) AS total_billing
+FROM healthcare_dataset
+WHERE dateofadmission >= DATE_SUB(CURDATE(), INTERVAL 3 YEAR)
+GROUP BY first_name, last_name
+HAVING admission_count > 1
+ORDER BY admission_count DESC;
+
+
 ```
 
-   **3.** **Write a SQL query to calculate the total billing amount for each insurance provider.**
 
-   
+
+
+Frequent readmissions could indicate chronic illnesses or inadequate post-treatment care. A high number of repeat admissions may suggest that patients are not receiving effective long-term treatment, leading to a cycle of hospitalization. These insights allow healthcare providers to develop better follow-up programs, improve preventive care, and allocate resources to reduce unnecessary hospital stays. Additionally, understanding the financial impact of readmissions can help in cost optimization and policy-making.
+
+
+
+
+### 4. Goal:  
+**Determine the insurance provider with the highest average billing amount per patient.**  
+*(This helps healthcare institutions understand which insurance companies cover the most expensive treatments, aiding in strategic financial planning.)*
+
+#### **SQL Query:**
 ```sql
-     SELECT 
-           insurance_provider,
-           SUM(billing_amount) as total_billing_amount
-     FROM healthanalysis
-     GROUP BY insurance_provider 
-     ORDER BY total_billing_amount DESC;
+SELECT insurance_provider, ROUND(AVG(billing_amount), 2) AS avg_billing
+FROM healthcare_dataset
+GROUP BY insurance_provider
+ORDER BY avg_billing DESC
+LIMIT 1;
+
+
 ```
 
-   **4.** **Write a SQL query to find the average age of patients who have "Medicare" as their insurance provider.**
 
-   
+Insurance providers differ in the average cost of claims they process. Identifying the insurance company with the highest average billing amount can help hospitals evaluate financial risks and optimize contract negotiations. Additionally, this insight enables policymakers to assess which insurance plans contribute the most to healthcare costs, helping in decision-making for cost reduction strategies and premium adjustments.
+
+
+### 5. Goal:  
+**Analyze the number of patients each doctor has treated and their corresponding average billing amount.**  
+*(This provides insights into patient distribution across doctors and helps evaluate workload balance and revenue generation.)*
+
+#### **SQL Query:**
 ```sql
-      SELECT 
-           AVG(age)
-      FROM healthanalysis
-      WHERE insurance_provider='Medicare';
+SELECT doctor, COUNT(*) AS patient_count, ROUND(AVG(billing_amount), 2) AS avg_billing
+FROM healthcare_dataset
+GROUP BY doctor
+ORDER BY patient_count DESC;
+
 ```
+Some doctors manage significantly more patients than others, which may indicate specialization in high-demand treatments or understaffing issues in certain departments. Understanding doctor-patient distribution helps in workload balancing, optimizing hospital operations, and ensuring patient care quality. Additionally, analyzing the average billing per doctor provides insights into revenue generation and potential disparities in treatment costs among practitioners.
 
-   **5.** **Write a SQL query to find the highest billing amount for each insurance provider.**
-
-   
-```sql
-      WITH cteRowNum AS (
-      SELECT  
-            insurance_provider,
-            billing_amount,
-	    ROW_NUMBER() OVER(PARTITION BY insurance_provider 
-      ORDER BY billing_amount DESC) AS RowNum
-	    FROM healthanalysis;)
-
-      SELECT  
-            insurance_provider,
-            billing_amount
-      FROM cteRowNum
-      WHERE RowNum in(1)
-      ORDER BY billing_amount DESC;
-```
-
-   **6.** **Write a SQL query to get the first and last names of patients, along with a list of all medications they are prescribed (concatenated), and the total count of distinct medications for each patient.**
-
-   
-```sql
-      SELECT 
-            first_name,
-            last_name,
-            GROUP_CONCAT(DISTINCT medication ORDER BY medication) AS medications,
-            COUNT(DISTINCT medication) AS total_medications
-     FROM  healthanalysis
-     GROUP BY 
-             first_name,
-             last_name
-    ORDER BY 
-    first_name, last_name;
-```
-
-   **7.** **Write a SQL query to count test results by category. Return the results as "Healthy" for "Normal", "Unhealthy" for "Abnormal", and "Test 
-Again" for "Inconclusive".**
-
-   
-```sql
-      SELECT test_result,
-         CASE 
-         WHEN test_result='Normal' THEN 'Healthy'
-         WHEN test_result='Abnormal' THEN 'Unhealthy'
-         WHEN test_result='Inconclusive' THEN 'Please Repeat Test'
-         ELSE '0'
-         END AS health_status,
-         COUNT(*)
-     FROM healthanalysis
-     GROUP BY test_result;
-```
-
-   **8.** **Write a SQL query to find the top 5 "luckiest" patients who had normal test results and paid the minimum billing amounts.**
-
-   
-```sql
-      WITH RankedPatients AS
-    (
-    SELECT 
-        first_name AS PatientFirstName,
-        last_name AS PatientLastName,
-        billing_amount AS BillingAmount,
-        ROW_NUMBER() OVER (ORDER BY billing_amount ASC) AS RowRank
-    FROM healthanalysis
-    WHERE test_result = 'Normal'
-   )
-    SELECT 
-        PatientFirstName,
-        PatientLastName,
-        BillingAmount
-    FROM 
-    RankedPatients
-    WHERE 
-    RowRank <= 5
-    ORDER BY RowRank;
-```
-
-   **9.** **Write a SQL query to count the number of patients for each hospital, broken down by the years 2020, 2021, and 2022.**
-
-   
-```sql
-      SELECT
-           first_name,
-           last_name,
-           dateofadmission,
-           discharge_date,
-           DATEDIFF(discharge_date,dateofadmission) AS hospitalization_period
-      FROM healthanalysis
-      ORDER BY first_name ASC;
-```
-
-   **10.** **Write a SQL query to count the number of patients for each blood type, and add a column that shows which blood types they are compatible with for receiving blood.**
-
-```sql
-      SELECT
-         first_name,    
-         last_name,
-         blood_type,
-         CASE 
-         WHEN blood_type='B-' THEN '0- AND B-'
-         WHEN blood_type='A+' THEN '0+,0-,A+,A-'
-         WHEN blood_type='A-' THEN '0- AND A-'
-         WHEN blood_type='0+' THEN '0+ AND 0-'
-         WHEN blood_type='AB+' THEN 'ALL'
-         WHEN blood_type='AB-' THEN '0-,A-,B-,AB-'
-         WHEN blood_type='B+' THEN '0+,0-,B+,B-'
-         WHEN blood_type='0-+' THEN '0-'
-         ELSE 0
-         END AS 'CAN RECEIVE FROM THIS GROUPS'
-      FROM healthanalysis;
-    
-```
-   
-   
-
-**Conclusion**
-
-This project provides a comprehensive introduction to SQL for data analysts, focusing on healthcare data. It covers database setup, data cleaning, exploratory data analysis, and business-driven SQL queries. The insights gained from this project can help improve healthcare management by understanding patient demographics and medical conditions. Additionally, the analysis can assist insurance providers in making informed decisions by examining patient demographics, medical conditions, and billing trends.
-
-**How to Use**
-
-1. **Clone the Repository:** Clone this project repository from GitHub.
-2. **Set Up the Database:** Run the SQL scripts provided in the healthcare_database_setup.sql file to create and populate the healthcare database.
-3. **Run the Queries:** Use the SQL queries provided in the analysis_queries.sql file to analyze the healthcare data.
-4. **Explore and Modify:** Feel free to modify the queries to explore other aspects of the healthcare dataset or answer additional healthcare-related questions.
-
-**Author - Kubra DIZLEK**
-
-This project is part of my portfolio, showcasing the SQL skills essential for data analyst roles. If you have any questions, feedback, or would like to collaborate, feel free to get in touch!
-
-**Stay Updated and Join the Community**
-
-To stay updated on SQL, data analysis, and related insights, follow me on social media:
-* **LinkedIn:** Connect with me professionally.
-* **ORCID:** Connect for a unique research identifier.
-
-I appreciate your support and am excited to connect with you!
-
----
