@@ -4,9 +4,13 @@
 
 
 ### **Overview**
+
 Healthcare data plays a crucial role in understanding patient demographics, medical conditions, hospital operations, and financial costs associated with treatment. This dataset includes patient records such as age, gender, medical conditions, admission details, hospital names, doctor assignments, insurance providers, billing amounts, and test results. 
 
 By analyzing this dataset, we aim to uncover trends in patient admissions, hospital billing, medical conditions, and insurance provider expenses. The insights gained can help improve hospital resource management, financial planning, and patient care strategies.
+Healthcare data plays a crucial role in understanding patient demographics, medical conditions, hospital operations, and financial costs associated with treatment. 
+
+Note:The dataset used in this project is **sourced from Kaggle** and is designed specifically for **analytical and educational purposes**. 
 
 ### **Methodology**
 To ensure a structured approach to analyzing the dataset, we followed these steps:
