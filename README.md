@@ -16,7 +16,12 @@ Note:The dataset used in this project is **sourced from Kaggle** and is designed
 To ensure a structured approach to analyzing the dataset, we followed these steps:
 
 1. **Importing Data** – Loaded the dataset into SQL for analysis.
-2. **Data Cleaning** – Checked for inconsistencies, missing values, and potential errors in hospital names, patient details, and billing amounts.
+2. **Data Cleaning** – Performed essential data cleaning steps to ensure accuracy and consistency in the dataset:
+   - **Handled missing values**: Checked for null or empty fields in patient details, billing amounts, and medical conditions.
+   - **Standardized categorical data**: Ensured consistency in hospital names, doctor names, admission types, and medical condition labels.
+   - **Corrected data types**: Converted numerical fields like age and billing amounts to appropriate data types and reformatted date columns.
+   - **Removed duplicate records**: Checked for and eliminated any duplicate patient records or redundant hospital entries.
+   - **Validated logical consistency**: Ensured dates were in the correct order (e.g., admission dates were before discharge dates) and that billing amounts were not negative.
 3. **Exploratory Data Analysis (EDA)** – Conducted an initial review of patient demographics, medical conditions, and billing distribution.
 4. **Analysis** – Performed SQL queries to extract valuable insights from the dataset.
 
