@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/107538e0-8133-4cec-925e-49447c650b00)
 
 # Advanced SQL Analysis on Healthcare Dataset
 
