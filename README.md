@@ -8,8 +8,7 @@
 **Project Title:** Healthcare Data Analysis  
 **Database:** healthcare_dataset.csv  
 
-This project demonstrates SQL skills and techniques commonly used by data analysts to create, clean, explore, and analyze a healthcare dataset. It involves setting up a database, performing exploratory data analysis (EDA), and drawing insights from healthcare data. The project is ideal for beginners who want to develop solid SQL skills in data analysis.
-
+This project demonstrates SQL skills and techniques commonly used by data analysts to create, clean, explore, and analyze a healthcare dataset. It involves setting up a database, performing exploratory data analysis (EDA), and drawing insights from healthcare data.
 **Objectives**
 
 1. **Set Up Healthcare Database:** Create and populate a healthcare database with the provided dataset.
